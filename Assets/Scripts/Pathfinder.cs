@@ -7,18 +7,18 @@ public class Pathfinder : MonoBehaviour
 {
     List<Tile> open = new List<Tile>();
     List<Tile> closed = new List<Tile>();
-    List<Tile> nonTraversible = new List<Tile>();
+    List<Tile> currentPath = new List<Tile>();
+    List<Tile> newPath = new List<Tile>();
 
     Tile startTile = new Tile();
     Tile targetTile = new Tile();
     Tile currentTile = new Tile();
 
-    private void Start() {
-        open.Add(startTile);
-    }
-
 
     private void FindPath(Tile start, Tile target) {
+
+        open.Add(startTile);
+
         // set currentTile to the tile in the open list with the lowest fCost
         while (currentTile != targetTile) {
             open.Sort((tileA, tileB) => {
@@ -31,7 +31,7 @@ public class Pathfinder : MonoBehaviour
             });
             currentTile = open.FirstOrDefault();
             // this null check is to prevent running out of tiles when trying to set an inaccesible
-            // tile as target (probably prevent this from happening in some other way later)
+            // tile as target (should probably prevent this from happening in some other way later)
             if (currentTile == null) {
                 Debug.Log("Tried to access inaccessible tile");
                 return;
@@ -42,18 +42,26 @@ public class Pathfinder : MonoBehaviour
 
             // if currentTile is same as target, we have a path
             if (currentTile == targetTile) {
-                // return path here
+                return;
             }
 
             // go through all neighbor tiles that the current tile has, and check if they are traversible
             foreach (Tile neighbor in currentTile.neighbors) {
-                if (nonTraversible.Contains(neighbor) || closed.Contains(neighbor)) {
+                if (!neighbor.isTraversible || closed.Contains(neighbor)) {
                     continue;
+                }
+
+                // if new path is shorter implement!!
+                if (newPath.Count < currentPath.Count || !open.Contains(neighbor)) {
+                    neighbor.fCost = neighbor.gCost + neighbor.hCost;
+                    // set parent of neighbor to currentTile
+                    if (!open.Contains(neighbor)) {
+                        open.Add(neighbor);
+                    }
                 }
             }
 
-            // keep watching https://www.youtube.com/watch?v=-L-WgKMFuhE&list=PLFt_AvWsXl0cq5Umv3pMC9SPnKjfp9eGW&index=1
-            // for a* tips
+
 
 
 
