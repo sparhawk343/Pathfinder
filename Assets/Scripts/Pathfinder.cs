@@ -7,12 +7,13 @@ public class Pathfinder : MonoBehaviour
 {
     List<Tile> open = new List<Tile>();
     List<Tile> closed = new List<Tile>();
-    List<Tile> currentPath = new List<Tile>();
-    List<Tile> newPath = new List<Tile>();
 
-    Tile startTile = new Tile();
-    Tile targetTile = new Tile();
-    Tile currentTile = new Tile();
+    Tile startTile;
+    Tile targetTile;
+    Tile currentTile;
+
+    const int baseDiagonalCost = 14;
+    const int baseStraightCost = 10;
 
 
     private void FindPath(Tile start, Tile target) {
@@ -46,28 +47,39 @@ public class Pathfinder : MonoBehaviour
             }
 
             // go through all neighbor tiles that the current tile has, and check if they are traversible
-            foreach (Tile neighbor in currentTile.neighbors) {
-                if (!neighbor.isTraversible || closed.Contains(neighbor)) {
+            foreach (Tile neighborTile in currentTile.neighbors) {
+                if (!neighborTile.isTraversible || closed.Contains(neighborTile)) {
                     continue;
                 }
 
-                // if new path is shorter implement!!
-                if (newPath.Count < currentPath.Count || !open.Contains(neighbor)) {
-                    neighbor.fCost = neighbor.gCost + neighbor.hCost;
-                    // set parent of neighbor to currentTile
-                    if (!open.Contains(neighbor)) {
-                        open.Add(neighbor);
+                int newMovementCostToNeighbor = currentTile.gCost + GetDistance(currentTile, neighborTile);
+                if (newMovementCostToNeighbor < neighborTile.gCost || !open.Contains(neighborTile)) {
+                    neighborTile.gCost = newMovementCostToNeighbor;
+                    neighborTile.hCost = GetDistance(neighborTile, targetTile);
+                    neighborTile.parentTile = currentTile;
+                    if (!open.Contains(neighborTile)) {
+                        open.Add(neighborTile);
                     }
                 }
             }
-
-
-
-
-
-
-
         }
     }
-    
+
+    int GetDistance(Tile tileA, Tile tileB) {
+        int distanceX = Mathf.Abs(tileA.gridX - tileB.gridX);
+        int distanceY = Mathf.Abs(tileA.gridY - tileB.gridY);
+
+        if (distanceX > distanceY) {
+            return baseDiagonalCost * distanceY + baseStraightCost * (distanceX - distanceY);
+        }
+        else {
+            return baseDiagonalCost * distanceX + baseStraightCost * (distanceY - distanceX);
+        }
+
+    }
+
+
+    // TODO:
+    // uncouple Sebastian's solution from my tile, tilegrid and pathfinder
+    // find a way to make my own grid solution 
 }
