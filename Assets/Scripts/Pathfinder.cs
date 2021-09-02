@@ -15,6 +15,12 @@ public class Pathfinder : MonoBehaviour
     const int baseDiagonalCost = 14;
     const int baseStraightCost = 10;
 
+    public TileGrid grid;
+
+    private void Awake() {
+        grid = GetComponent<TileGrid>();
+    }
+
 
     private void FindPath(Tile start, Tile target) {
 
@@ -43,11 +49,12 @@ public class Pathfinder : MonoBehaviour
 
             // if currentTile is same as target, we have a path
             if (currentTile == targetTile) {
+                RetracePath(startTile, targetTile);
                 return;
             }
 
             // go through all neighbor tiles that the current tile has, and check if they are traversible
-            foreach (Tile neighborTile in currentTile.neighbors) {
+            foreach (Tile neighborTile in grid.GetNeighbors(currentTile)) {
                 if (!neighborTile.isTraversible || closed.Contains(neighborTile)) {
                     continue;
                 }
@@ -63,6 +70,17 @@ public class Pathfinder : MonoBehaviour
                 }
             }
         }
+    }
+
+    void RetracePath(Tile startTile, Tile endTile) {
+        List<Tile> path = new List<Tile>();
+        Tile currentTile = targetTile;
+
+        while (currentTile != startTile) {
+            path.Add(currentTile);
+            currentTile = currentTile.parentTile;
+        }
+        path.Reverse();
     }
 
     int GetDistance(Tile tileA, Tile tileB) {

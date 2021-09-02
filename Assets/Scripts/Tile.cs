@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public Vector2 position;
-    public int gCost;
-    public int hCost;
-    public List<Tile> neighbors = new List<Tile>();
-    public bool isTraversible = true;
-    public Tile parentTile;
+    [SerializeField] public Vector2 position;
+    [SerializeField] public int gCost;
+    [SerializeField] public int hCost;
+    [SerializeField] public List<Tile> neighbors = new List<Tile>();
+    [SerializeField] public bool isTraversible = true;
+    [SerializeField] public Tile parentTile;
 
-    public int gridX;
-    public int gridY;
+    [SerializeField] public int gridX;
+    [SerializeField] public int gridY;
 
     public Tile(int _gridX, int _gridY) {
         _gridX = gridX;

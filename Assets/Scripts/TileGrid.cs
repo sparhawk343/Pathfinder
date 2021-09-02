@@ -2,10 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileGrid : MonoBehaviour
-{
+public class TileGrid : MonoBehaviour {
+    Tile[,] grid;
+
     int gridSizeX;
     int gridSizeY;
+
+    void PopulateGrid() {
+        grid = new Tile[gridSizeX, gridSizeY];
+
+        for (int x = 0; x < gridSizeX; x++) {
+            for (int y = 0; y < gridSizeY; y++){
+                grid[x, y] = new Tile(x, y);
+                Tile tile = new Tile(x, y);
+                Instantiate<Tile>(tile);
+            }
+        }
+    }
 
     public List<Tile> GetNeighbors(Tile tile) {
         List<Tile> neighbors = new List<Tile>();
