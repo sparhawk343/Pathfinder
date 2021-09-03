@@ -4,18 +4,29 @@ using UnityEngine;
 
 public class TileGrid : MonoBehaviour {
     Tile[,] grid;
+    public Transform tilePrefab;
+    Vector2Int gridSize = new Vector2Int(10,10);
+    float outlinePercent = 0.05f;
 
-    int gridSizeX;
-    int gridSizeY;
+
+    private void Start() {
+        PopulateGrid();
+    }
 
     void PopulateGrid() {
-        grid = new Tile[gridSizeX, gridSizeY];
+        grid = new Tile[gridSize.x, gridSize.y];
 
-        for (int x = 0; x < gridSizeX; x++) {
-            for (int y = 0; y < gridSizeY; y++){
-                grid[x, y] = new Tile(x, y);
-                Tile tile = new Tile(x, y);
-                Instantiate<Tile>(tile);
+        for (int x = 0; x < gridSize.x; x++) {
+            for (int y = 0; y < gridSize.y; y++){
+                
+                Vector3 tilePosition = new Vector3(-gridSize.x / 2 + 5f + x, 0, -gridSize.y / 2 + 5f + y);
+                Transform newTile = Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90));
+                newTile.parent = gameObject.GetComponent<TileGrid>().transform;
+                newTile.localScale = Vector3.one * (1 - outlinePercent);
+                grid[x, y] = tilePrefab.GetComponent<Tile>();
+                grid[x, y].gridX = Mathf.RoundToInt(tilePosition.x);
+                grid[x, y].gridY = Mathf.RoundToInt(tilePosition.z);
+                //Debug.Log(grid[x, y].gridX + " " + grid[x, y].gridY);
             }
         }
     }
@@ -31,8 +42,8 @@ public class TileGrid : MonoBehaviour {
                 int checkX = tile.gridX + x;
                 int checkY = tile.gridY + y;
 
-                if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY) {
-                    neighbors.Add(new Tile(checkX, checkY));
+                if (checkX >= 0 && checkX < gridSize.x && checkY >= 0 && checkY < gridSize.y) {
+                    neighbors.Add(grid[checkX, checkY]);
                 }
             }
         }

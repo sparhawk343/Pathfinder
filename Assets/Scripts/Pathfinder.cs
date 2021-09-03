@@ -98,6 +98,16 @@ public class Pathfinder : MonoBehaviour
 
 
     // TODO:
-    // uncouple Sebastian's solution from my tile, tilegrid and pathfinder
-    // find a way to make my own grid solution 
+    // finish mirroring MainGrid into TileGrid
+    // get rid of Node
+    // make a test for pathfinding
+    // implement mouse events (hover, select) -> check notes from David
+    //      -> inputmanager, player, tile
+    //      -> interfaces for ISelectable, IHoverable
+    //      -> input using new input system (callbacks)
+    // implement player
+    // implement action points
+    // implement movement (walk/dash)
+    // implement path line
+    // implement vfx/highlights/gizmos for tile
 }

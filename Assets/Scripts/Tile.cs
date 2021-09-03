@@ -4,22 +4,19 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    [SerializeField] public Vector2 position;
-    [SerializeField] public int gCost;
-    [SerializeField] public int hCost;
-    [SerializeField] public List<Tile> neighbors = new List<Tile>();
-    [SerializeField] public bool isTraversible = true;
-    [SerializeField] public Tile parentTile;
+    [HideInInspector] public int gCost;
+    [HideInInspector] public int hCost;
+    [HideInInspector] public List<Tile> neighbors = new List<Tile>();
+    [HideInInspector] public bool isTraversible = true;
+    [HideInInspector] public Tile parentTile;
 
-    [SerializeField] public int gridX;
-    [SerializeField] public int gridY;
+    [HideInInspector] public int gridX;
+    [HideInInspector] public int gridY;
 
-    public Tile(int _gridX, int _gridY) {
-        _gridX = gridX;
-        _gridY = gridY;
-    }
 
     public int fCost {
         get { return gCost + hCost; }
     }
+
+
 }
