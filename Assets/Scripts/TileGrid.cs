@@ -38,7 +38,7 @@ public class TileGrid : MonoBehaviour {
                     //Debug.Log("this tile was not traversible");
                 }
 
-                grid[x, y] = tilePrefab.GetComponent<Tile>();
+                grid[x, y] = newTile.GetComponent<Tile>();
                 grid[x, y].gridX = Mathf.RoundToInt(tilePosition.x);
                 grid[x, y].gridY = Mathf.RoundToInt(tilePosition.z);
                 grid[x, y].isTraversible = traversible;
@@ -83,7 +83,7 @@ public class TileGrid : MonoBehaviour {
             foreach (Tile tile in grid) {
                 Gizmos.color = (tile.isTraversible) ? Color.white : Color.red;
 
-                Gizmos.DrawCube(tile.transform.position, Vector3.one * (tileDiameter - 0.1f));
+                Gizmos.DrawCube(tile.transform.position, Vector3.one * (tileDiameter - 0.3f));
             }
 
         }
