@@ -8,8 +8,6 @@ public class Pathfinder : MonoBehaviour
     List<Tile> open = new List<Tile>();
     List<Tile> closed = new List<Tile>();
 
-    Tile startTile;
-    Tile targetTile;
     Tile currentTile;
 
     const int baseDiagonalCost = 14;
@@ -24,10 +22,10 @@ public class Pathfinder : MonoBehaviour
 
     private void FindPath(Tile start, Tile target) {
 
-        open.Add(startTile);
+        open.Add(start);
 
         // set currentTile to the tile in the open list with the lowest fCost
-        while (currentTile != targetTile) {
+        while (currentTile != target) {
             open.Sort((tileA, tileB) => {
                 if (tileA.fCost <= tileB.fCost) {
                     return 1;
@@ -48,8 +46,8 @@ public class Pathfinder : MonoBehaviour
             closed.Add(currentTile);
 
             // if currentTile is same as target, we have a path
-            if (currentTile == targetTile) {
-                RetracePath(startTile, targetTile);
+            if (currentTile == target) {
+                RetracePath(start, target);
                 return;
             }
 
@@ -62,7 +60,7 @@ public class Pathfinder : MonoBehaviour
                 int newMovementCostToNeighbor = currentTile.gCost + GetDistance(currentTile, neighborTile);
                 if (newMovementCostToNeighbor < neighborTile.gCost || !open.Contains(neighborTile)) {
                     neighborTile.gCost = newMovementCostToNeighbor;
-                    neighborTile.hCost = GetDistance(neighborTile, targetTile);
+                    neighborTile.hCost = GetDistance(neighborTile, target);
                     neighborTile.parentTile = currentTile;
                     if (!open.Contains(neighborTile)) {
                         open.Add(neighborTile);
@@ -74,7 +72,7 @@ public class Pathfinder : MonoBehaviour
 
     void RetracePath(Tile startTile, Tile endTile) {
         List<Tile> path = new List<Tile>();
-        Tile currentTile = targetTile;
+        Tile currentTile = endTile;
 
         while (currentTile != startTile) {
             path.Add(currentTile);
