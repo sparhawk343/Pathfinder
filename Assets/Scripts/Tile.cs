@@ -6,7 +6,6 @@ public class Tile : MonoBehaviour
 {
     [HideInInspector] public int gCost;
     [HideInInspector] public int hCost;
-    [HideInInspector] public List<Tile> neighbors = new List<Tile>();
     [HideInInspector] public bool isTraversible = true;
     [HideInInspector] public Tile parentTile;
 

@@ -20,8 +20,9 @@ public class Pathfinder : MonoBehaviour
     }
 
 
-    private void FindPath(Tile start, Tile target) {
+    private List<Tile> FindPath(Tile start, Tile target) {
 
+        currentTile = null;
         open.Add(start);
 
         // set currentTile to the tile in the open list with the lowest fCost
@@ -39,7 +40,7 @@ public class Pathfinder : MonoBehaviour
             // tile as target (should probably prevent this from happening in some other way later)
             if (currentTile == null) {
                 Debug.Log("Tried to access inaccessible tile");
-                return;
+                return null;
             }
             // remove currentTile from open and add it to closed
             open.Remove(currentTile);
@@ -47,8 +48,7 @@ public class Pathfinder : MonoBehaviour
 
             // if currentTile is same as target, we have a path
             if (currentTile == target) {
-                RetracePath(start, target);
-                return;
+                break;
             }
 
             // go through all neighbor tiles that the current tile has, and check if they are traversible
@@ -68,9 +68,11 @@ public class Pathfinder : MonoBehaviour
                 }
             }
         }
+        // here is where we return the path (outside the while loop, which has the same check as the path found check, basically)
+        return RetracePath(start, target);
     }
 
-    void RetracePath(Tile startTile, Tile endTile) {
+    List<Tile> RetracePath(Tile startTile, Tile endTile) {
         List<Tile> path = new List<Tile>();
         Tile currentTile = endTile;
 
@@ -79,6 +81,7 @@ public class Pathfinder : MonoBehaviour
             currentTile = currentTile.parentTile;
         }
         path.Reverse();
+        return path;
     }
 
     int GetDistance(Tile tileA, Tile tileB) {
@@ -96,16 +99,17 @@ public class Pathfinder : MonoBehaviour
 
 
     // TODO:
-    // finish mirroring MainGrid into TileGrid
-    // get rid of Node
     // make a test for pathfinding
     // implement mouse events (hover, select) -> check notes from David
     //      -> inputmanager, player, tile
     //      -> interfaces for ISelectable, IHoverable
     //      -> input using new input system (callbacks)
+    // implement pathfinding range
+    // implement path line
+
     // implement player
     // implement action points
     // implement movement (walk/dash)
-    // implement path line
+
     // implement vfx/highlights/gizmos for tile
 }
