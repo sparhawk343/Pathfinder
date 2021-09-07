@@ -1,26 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TileGrid : MonoBehaviour {
-    Tile[,] grid;
+    public Tile[,] grid;
     public Transform tilePrefab;
     Vector2Int gridSize = new Vector2Int(10,10);
 
     float outlinePercent = 0.05f;
 
     public LayerMask nonTraversibleMask;
-    //public Vector2 gridWorldSize;
     public float tileRadius = 1f;
     public float tileDiameter;
 
-
-
-
-    private void Start() {
+    private void Awake() {
         tileDiameter = tileRadius * 2;
         PopulateGrid();
     }
+
+
 
     void PopulateGrid() {
         grid = new Tile[gridSize.x, gridSize.y];
@@ -36,12 +35,13 @@ public class TileGrid : MonoBehaviour {
                 bool traversible = (!Physics.CheckSphere(newTile.position, tileRadius, nonTraversibleMask));
 
                 grid[x, y] = newTile.GetComponent<Tile>();
-                grid[x, y].gridX = Mathf.RoundToInt(tilePosition.x);
-                grid[x, y].gridY = Mathf.RoundToInt(tilePosition.z);
+                grid[x, y].gridX = x; /*Mathf.RoundToInt(tilePosition.x);*/
+                grid[x, y].gridY = y;/*Mathf.RoundToInt(tilePosition.z);*/
                 grid[x, y].isTraversible = traversible;
             }
         }
     }
+
 
     public List<Tile> GetNeighbors(Tile tile) {
         List<Tile> neighbors = new List<Tile>();
