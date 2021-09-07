@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class TileGrid : MonoBehaviour {
     public Tile[,] grid;
+    public Tile[] selectedTiles;
     public Transform tilePrefab;
     Vector2Int gridSize = new Vector2Int(10,10);
 

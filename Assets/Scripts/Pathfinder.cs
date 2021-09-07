@@ -19,7 +19,7 @@ public class Pathfinder : MonoBehaviour
     }
 
     private void Start() {
-        TestPathFinder();
+        //TestPathFinder();
     }
 
 
