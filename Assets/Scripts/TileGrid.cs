@@ -5,7 +5,9 @@ using UnityEngine.Events;
 
 public class TileGrid : MonoBehaviour {
     public Tile[,] grid;
-    public Tile[] selectedTiles;
+    public Tile[] selectedTiles = new Tile[2];
+    public Tile selectedTile;
+    
     public Transform tilePrefab;
     Vector2Int gridSize = new Vector2Int(10,10);
 
@@ -20,6 +22,25 @@ public class TileGrid : MonoBehaviour {
         PopulateGrid();
     }
 
+    private void Start() {
+        OnSelectedEvent.AddListener();
+    }
+
+    private void StoreSelection() {
+        if (selectedTiles[0] == null && selectedTiles[1] == null) {
+            selectedTiles[0] = selectedTile;
+        }
+        if (selectedTiles[0] != null && selectedTiles[1] == null) {
+            selectedTiles[1] = selectedTile;
+        }
+        if (selectedTiles[0] != null && selectedTiles[1] != null) {
+            selectedTiles[0] = selectedTile;
+        }
+        selectedTiles[0] = firstTile;
+        selectedTiles[1] = secondTile;
+
+        Debug.Log(selectedTiles[0] + " " + selectedTiles[1]);
+    }
 
 
     void PopulateGrid() {

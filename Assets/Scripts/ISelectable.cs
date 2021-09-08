@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ISelectable {
 
-    void OnClickAction();
+    void OnClickAction(ISelectable selectable);
 }

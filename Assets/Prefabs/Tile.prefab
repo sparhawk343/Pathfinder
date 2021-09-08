@@ -116,3 +116,7 @@ MonoBehaviour:
   parentTile: {fileID: 0}
   gridX: 0
   gridY: 0
+  isSelected: 0
+  OnSelectedEvent:
+    m_PersistentCalls:
+      m_Calls: []
