@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class Pathfinder : MonoBehaviour
 {
@@ -19,11 +21,10 @@ public class Pathfinder : MonoBehaviour
     }
 
     private void Start() {
-        //TestPathFinder();
     }
 
 
-    private List<Tile> FindPath(Tile start, Tile target) {
+    public List<Tile> FindPath(Tile start, Tile target) {
 
         currentTile = null;
         open.Add(start);
@@ -85,7 +86,12 @@ public class Pathfinder : MonoBehaviour
             currentTile = currentTile.parentTile;
         }
         path.Reverse();
+        foreach (Tile tile in path) {
+            MeshRenderer meshRenderer = tile.GetComponent<MeshRenderer>(); 
+            meshRenderer.material.color = Color.blue;
+        }
         return path;
+        //Debug.Log(path[0] + " " + path[1]);
     }
 
     int GetDistance(Tile tileA, Tile tileB) {
@@ -102,32 +108,19 @@ public class Pathfinder : MonoBehaviour
     }
 
     public void TestPathFinder() {
-
-        int testX = Random.Range(0, 9);
-        int testY = Random.Range(0, 9);
-
-        Tile testStartTile = grid.grid[testX, testY];
-        Tile testTargetTile = grid.grid[testY, testX];
-
-        List<Tile> testPath = FindPath(testStartTile, testTargetTile);
-
-        foreach (Tile tile in testPath) {
-            Debug.Log(tile.gridX + " " + tile.gridY);
-        }
+        FindPath(grid.selectedArray[0], grid.selectedArray[1]);
     }
 
 
     // TODO:
-    // implement mouse events (hover, select) -> check notes from David
-    //      -> inputmanager, player, tile
-    //      -> interfaces for ISelectable, IHoverable
-    //      -> input using new input system (callbacks)
+    // fix pathfinding algorithm (it is currently doing what looks like a longest path solution)
     // implement pathfinding range
     // implement path line
 
     // implement player
     // implement action points
     // implement movement (walk/dash)
+    // optimize algorithm with heap
 
     // implement vfx/highlights/gizmos for tile
 }

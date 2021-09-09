@@ -5,7 +5,9 @@ using UnityEngine.Events;
 
 public class TileGrid : MonoBehaviour {
     public Tile[,] grid;
-    public Tile[] selectedTiles = new Tile[2];
+    public Stack<Tile> selectedTiles = new Stack<Tile>(2);
+    public Tile[] selectedArray = new Tile[2];
+
     public Tile selectedTile;
     
     public Transform tilePrefab;
@@ -22,25 +24,6 @@ public class TileGrid : MonoBehaviour {
         PopulateGrid();
     }
 
-    private void Start() {
-        OnSelectedEvent.AddListener();
-    }
-
-    private void StoreSelection() {
-        if (selectedTiles[0] == null && selectedTiles[1] == null) {
-            selectedTiles[0] = selectedTile;
-        }
-        if (selectedTiles[0] != null && selectedTiles[1] == null) {
-            selectedTiles[1] = selectedTile;
-        }
-        if (selectedTiles[0] != null && selectedTiles[1] != null) {
-            selectedTiles[0] = selectedTile;
-        }
-        selectedTiles[0] = firstTile;
-        selectedTiles[1] = secondTile;
-
-        Debug.Log(selectedTiles[0] + " " + selectedTiles[1]);
-    }
 
 
     void PopulateGrid() {
@@ -51,6 +34,8 @@ public class TileGrid : MonoBehaviour {
                 
                 Vector3 tilePosition = new Vector3(-gridSize.x / 2 + 0.5f + x, 0, -gridSize.y / 2 + 0.5f + y);
                 Transform newTile = Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90));
+                Tile currentTile = newTile.GetComponent<Tile>();
+                currentTile.OnSelectedEvent.AddListener(StoreSelection);
                 newTile.parent = gameObject.GetComponent<TileGrid>().transform;
                 newTile.localScale = Vector3.one * (1 - outlinePercent);
 
@@ -97,5 +82,14 @@ public class TileGrid : MonoBehaviour {
             }
 
         }
+    }
+
+
+    private void StoreSelection(ISelectable selectable) {
+        if (selectedTiles.Count >= 2) {
+            selectedTiles.Pop();
+        }
+        selectedTiles.Push((Tile)selectable);
+        selectedArray = selectedTiles.ToArray();
     }
 }
