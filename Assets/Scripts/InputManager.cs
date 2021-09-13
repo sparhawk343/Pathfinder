@@ -14,6 +14,7 @@ public class InputManager : MonoBehaviour
 
     private void Start() {
         controls.Mouse.Click.performed += ctx => OnMouseClick();
+        //controls.Mouse.Position.performed += ctx => OnMouseHover();
     }
 
     private void OnEnable() {
@@ -23,21 +24,34 @@ public class InputManager : MonoBehaviour
     private void OnDisable() {
         controls.Disable();
     }
-
-    private void OnMouseClick() {
-        DetectObject();
+    private void OnMouseHover() {
+        DetectObject(0);
     }
 
-    private void DetectObject() {
+    private void OnMouseClick() {
+        DetectObject(1);
+    }
+
+    private void DetectObject(int caseSwitcher) {
         Ray ray = mainCamera.ScreenPointToRay(controls.Mouse.Position.ReadValue<Vector2>());
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit)) {
             if (hit.collider != null) {
-                ISelectable selectable = hit.collider.GetComponent<ISelectable>();
-                if (selectable != null) {
-                    selectable.OnClickAction(selectable);
+                if (caseSwitcher == 0) {
+                    IHoverable hoverable = hit.collider.GetComponent<IHoverable>();
+                    if (hoverable != null) {
+                        hoverable.OnHoverAction(hoverable);
+                    }
+                    Debug.Log("Hit: " + hit.collider.tag);
                 }
-                Debug.Log("Hit: " + hit.collider.tag);
+                else if (caseSwitcher == 1) {
+                    ISelectable selectable = hit.collider.GetComponent<ISelectable>();
+                    if (selectable != null) {
+                        selectable.OnClickAction(selectable);
+                    }
+                    Debug.Log("Hit: " + hit.collider.tag);
+                }
+                
             }
 
         }

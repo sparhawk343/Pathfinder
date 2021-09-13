@@ -1,28 +1,20 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using UnityEngine.UI;
-using UnityEngine.Events;
 
 public class Pathfinder : MonoBehaviour
 {
     List<Tile> open = new List<Tile>();
     List<Tile> closed = new List<Tile>();
+    //Queue<Tile> open = new Queue<Tile>();
 
     Tile currentTile;
+    //Tile lowestTile;
 
     const int baseDiagonalCost = 14;
     const int baseStraightCost = 10;
 
     public TileGrid grid;
-
-    private void Awake() {
-    }
-
-    private void Start() {
-    }
-
 
     public List<Tile> FindPath(Tile start, Tile target) {
 
@@ -39,7 +31,19 @@ public class Pathfinder : MonoBehaviour
                     return -1;
                 }
             });
-            currentTile = open.FirstOrDefault();
+            currentTile = open.LastOrDefault();
+
+            //    lowestTile = null;
+            //foreach (Tile tile in open) {
+            //    if (lowestTile != null && tile.fCost <= lowestTile.fCost) {
+            //         currentTile = lowestTile;
+            //    }
+            //    else {
+            //        lowestTile = tile;
+            //    }
+
+            //}
+
             // this null check is to prevent running out of tiles when trying to set an inaccesible
             // tile as target (should probably prevent this from happening in some other way later)
             if (currentTile == null) {
@@ -58,6 +62,7 @@ public class Pathfinder : MonoBehaviour
             // go through all neighbor tiles that the current tile has, and check if they are traversible
             foreach (Tile neighborTile in grid.GetNeighbors(currentTile)) {
                 if (!neighborTile.isTraversible || closed.Contains(neighborTile)) {
+                    open.Remove(neighborTile);
                     continue;
                 }
 
@@ -68,7 +73,6 @@ public class Pathfinder : MonoBehaviour
                     neighborTile.parentTile = currentTile;
                     if (!open.Contains(neighborTile)) {
                         open.Add(neighborTile);
-                        //Debug.Log(open.Count);
                     }
                 }
             }
@@ -89,9 +93,11 @@ public class Pathfinder : MonoBehaviour
         foreach (Tile tile in path) {
             MeshRenderer meshRenderer = tile.GetComponent<MeshRenderer>(); 
             meshRenderer.material.color = Color.blue;
+            //if (currentTile.parentTile != null) {
+            //    Debug.DrawLine(currentTile.parentTile.transform.position, currentTile.transform.position, Color.black);
+            //}
         }
         return path;
-        //Debug.Log(path[0] + " " + path[1]);
     }
 
     int GetDistance(Tile tileA, Tile tileB) {
@@ -111,11 +117,18 @@ public class Pathfinder : MonoBehaviour
         FindPath(grid.selectedArray[0], grid.selectedArray[1]);
     }
 
+    public void ResetPathFinder() {
+        open.Clear();
+        closed.Clear();
+        grid.ResetGrid();
+    }
+
 
     // TODO:
     // fix pathfinding algorithm (it is currently doing what looks like a longest path solution)
-    // implement pathfinding range
+    // mouse hovering interaction
     // implement path line
+    // implement pathfinding range
 
     // implement player
     // implement action points

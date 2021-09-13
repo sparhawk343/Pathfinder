@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,7 +40,7 @@ public class TileGrid : MonoBehaviour {
                 newTile.parent = gameObject.GetComponent<TileGrid>().transform;
                 newTile.localScale = Vector3.one * (1 - outlinePercent);
 
-                bool traversible = (!Physics.CheckSphere(newTile.position, tileRadius, nonTraversibleMask));
+                bool traversible = (!Physics.CheckSphere(newTile.position, tileRadius - 0.04f, nonTraversibleMask));
 
                 grid[x, y] = newTile.GetComponent<Tile>();
                 grid[x, y].gridX = x; /*Mathf.RoundToInt(tilePosition.x);*/
@@ -49,6 +50,13 @@ public class TileGrid : MonoBehaviour {
         }
     }
 
+
+    //public List<Tile> GetNeighborsNew(Tile tile) {
+    //    List<Tile> neighbors = new List<Tile>();
+
+
+        
+    //}
 
     public List<Tile> GetNeighbors(Tile tile) {
         List<Tile> neighbors = new List<Tile>();
@@ -91,5 +99,13 @@ public class TileGrid : MonoBehaviour {
         }
         selectedTiles.Push((Tile)selectable);
         selectedArray = selectedTiles.ToArray();
+    }
+
+    public void ResetGrid() {
+        Array.Clear(selectedArray, 0, selectedArray.Length);
+        selectedTiles.Clear();
+        foreach (Tile tile in grid) {
+            tile.ResetTileColor();
+        }
     }
 }
