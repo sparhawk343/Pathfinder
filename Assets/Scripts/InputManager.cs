@@ -14,7 +14,7 @@ public class InputManager : MonoBehaviour
 
     private void Start() {
         controls.Mouse.Click.performed += ctx => OnMouseClick();
-        //controls.Mouse.Position.performed += ctx => OnMouseHover();
+        controls.Mouse.Position.performed += ctx => OnMouseHover();
     }
 
     private void OnEnable() {

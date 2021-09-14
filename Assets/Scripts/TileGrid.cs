@@ -51,11 +51,11 @@ public class TileGrid : MonoBehaviour {
     }
 
 
-    //public List<Tile> GetNeighborsNew(Tile tile) {
+    //public List<Tile> GetNeighbors(Tile tile) {
     //    List<Tile> neighbors = new List<Tile>();
 
 
-        
+
     //}
 
     public List<Tile> GetNeighbors(Tile tile) {

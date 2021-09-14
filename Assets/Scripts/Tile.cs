@@ -15,6 +15,8 @@ public class Tile : MonoBehaviour, ISelectable, IHoverable
     [HideInInspector] public bool isSelected;
     [HideInInspector] public bool isHovered;
 
+    private bool previousHover;
+
     public UnityEvent<ISelectable> OnSelectedEvent;
 
 
@@ -37,6 +39,7 @@ public class Tile : MonoBehaviour, ISelectable, IHoverable
     }
 
     public void OnHoverAction(IHoverable hoverable) {
+
         if (!isHovered && !isSelected) {
             MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
             Color color;
@@ -46,7 +49,6 @@ public class Tile : MonoBehaviour, ISelectable, IHoverable
             isHovered = true;
         }
         else {
-            //this.OnMouseOver();
             ResetTileColor();
             isHovered = false;
         }
