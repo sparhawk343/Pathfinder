@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Tile : MonoBehaviour, ISelectable, IHoverable
-{
+public class Tile : MonoBehaviour, ISelectable, IHoverable {
     [HideInInspector] public int gCost;
     [HideInInspector] public int hCost;
     [HideInInspector] public bool isTraversible = true;
@@ -12,56 +11,99 @@ public class Tile : MonoBehaviour, ISelectable, IHoverable
 
     [HideInInspector] public int gridX;
     [HideInInspector] public int gridY;
+
     [HideInInspector] public bool isSelected;
     [HideInInspector] public bool isHovered;
-
-    private bool previousHover;
+    [HideInInspector] public bool isInRange;
+    [HideInInspector] public bool isPath;
 
     public UnityEvent<ISelectable> OnSelectedEvent;
+    public UnityEvent<ISelectable> OnDeselectedEvent;
+    MeshRenderer meshRenderer;
+
+    public Color isSelectedColor;
+    public Color isHoveredColor;
+    public Color isInRangeColor;
+    public Color isPathColor;
+    public Color defaultColor;
 
 
     public int fCost {
         get { return gCost + hCost; }
     }
 
+    private void Awake() {
+        meshRenderer = GetComponent<MeshRenderer>();
+    }
+
     public void OnClickAction(ISelectable selectable) {
 
         if (isSelected == false) {
-            MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-            meshRenderer.material.color = Color.green;
-            isSelected = true;
+            OnSelectedEvent.Invoke(selectable);
         }
         else {
-            ResetTileColor();
+            OnDeselectedEvent.Invoke(selectable);
         }
 
-        OnSelectedEvent.Invoke(selectable);
     }
 
-    public void OnHoverAction(IHoverable hoverable) {
-
-        if (!isHovered && !isSelected) {
-            MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-            Color color;
-            if (ColorUtility.TryParseHtmlString("#60AD5F", out color)) {
-                meshRenderer.material.color = color;
-            }
-            isHovered = true;
-        }
-        else {
-            ResetTileColor();
-            isHovered = false;
-        }
+    public void OnHoverAction() {
+        isHovered = !isHovered;
+        ChangeTileColor();
     }
 
-    public void ResetTileColor() {
-        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-        Color color;
-        if (ColorUtility.TryParseHtmlString("#B9AAAA", out color)) {
-            meshRenderer.material.color = color;
-            isSelected = false;
+
+    public void ChangeTileColor() {
+        if (isSelected) {
+            meshRenderer.material.color = isSelectedColor;
+            return;
         }
+        if (isHovered) {
+            meshRenderer.material.color = isHoveredColor;
+            return;
+        }
+        if (isPath) {
+            meshRenderer.material.color = isPathColor;
+            return;
+        }
+        if (isInRange) {
+            meshRenderer.material.color = isInRangeColor;
+            return;
+        }
+        meshRenderer.material.color = defaultColor;
     }
 
+    public void UnhoverTile() {
+        isHovered = false;
+        ChangeTileColor();
+    }
+
+    public void DeselectTile() {
+        isSelected = false;
+        ChangeTileColor();
+    }
+
+    public void SelectTile() {
+        isSelected = true;
+        ChangeTileColor();
+    }
+
+    public void SetInRange() {
+        isInRange = true;
+        ChangeTileColor();
+    }
+
+    public void SetIsPath() {
+        isPath = true;
+        ChangeTileColor();
+    }
+
+    public void ResetTile() {
+        isHovered = false;
+        isSelected = false;
+        isInRange = false;
+        isPath = false;
+        ChangeTileColor();
+    }
 
 }

@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class InputManager : MonoBehaviour
-{
+public class InputManager : MonoBehaviour {
     private Controls controls;
     private Camera mainCamera;
+    private IHoverable previousHoverable;
 
     private void Awake() {
         controls = new Controls();
@@ -29,7 +28,9 @@ public class InputManager : MonoBehaviour
     }
 
     private void OnMouseClick() {
-        DetectObject(1);
+        if (!EventSystem.current.IsPointerOverGameObject()) {
+            DetectObject(1);
+        }
     }
 
     private void DetectObject(int caseSwitcher) {
@@ -38,20 +39,25 @@ public class InputManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit)) {
             if (hit.collider != null) {
                 if (caseSwitcher == 0) {
+
                     IHoverable hoverable = hit.collider.GetComponent<IHoverable>();
                     if (hoverable != null) {
-                        hoverable.OnHoverAction(hoverable);
+                        if (hoverable != previousHoverable) {
+                            if (previousHoverable != null) {
+                                previousHoverable.UnhoverTile();
+                            }
+                            hoverable.OnHoverAction();
+                            previousHoverable = hoverable;
+                        }
                     }
-                    Debug.Log("Hit: " + hit.collider.tag);
                 }
                 else if (caseSwitcher == 1) {
                     ISelectable selectable = hit.collider.GetComponent<ISelectable>();
                     if (selectable != null) {
                         selectable.OnClickAction(selectable);
                     }
-                    Debug.Log("Hit: " + hit.collider.tag);
                 }
-                
+
             }
 
         }

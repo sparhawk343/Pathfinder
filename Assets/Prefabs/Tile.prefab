@@ -117,6 +117,17 @@ MonoBehaviour:
   gridX: 0
   gridY: 0
   isSelected: 0
+  isHovered: 0
+  isInRange: 0
+  isPath: 0
   OnSelectedEvent:
     m_PersistentCalls:
       m_Calls: []
+  OnDeselectedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  isSelectedColor: {r: 0.07016899, g: 0.4339623, b: 0.06755074, a: 0}
+  isHoveredColor: {r: 0.3676549, g: 0.7075472, b: 0.34376115, a: 0}
+  isInRangeColor: {r: 0.6886792, g: 0.6572877, b: 0.2956123, a: 0}
+  isPathColor: {r: 0.09789959, g: 0.32851973, b: 0.8301887, a: 0}
+  defaultColor: {r: 0.7254902, g: 0.6666667, b: 0.6666667, a: 1}

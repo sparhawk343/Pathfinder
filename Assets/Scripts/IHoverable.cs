@@ -4,5 +4,7 @@ using UnityEngine;
 
 public interface IHoverable {
 
-    void OnHoverAction(IHoverable hoverable);
+    void OnHoverAction();
+    void UnhoverTile();
+    
 }
