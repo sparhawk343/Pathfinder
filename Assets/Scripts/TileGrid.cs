@@ -26,7 +26,6 @@ public class TileGrid : MonoBehaviour {
     }
 
 
-
     void PopulateGrid() {
         grid = new Tile[gridSize.x, gridSize.y];
 
@@ -52,6 +51,9 @@ public class TileGrid : MonoBehaviour {
     }
 
 
+    // created this GetTraversibleNeighbors method to get around the diagonal-move-through-wall-bug
+    // checks the cardinal directions for obstacles, then removes both those and diagonal tiles from viable moves if obstacles found
+    // nonTraversibleNeighbors is a Set so that I don't have to worry about duplicates, I love sets
     public List<Tile> GetTraversibleNeighbors(Tile tile) {
         List<Tile> neighbors = GetNeighbors(tile);
         HashSet<Tile> nonTraversibleNeighbors = new HashSet<Tile>();
@@ -94,7 +96,7 @@ public class TileGrid : MonoBehaviour {
         return neighbors;
     }
 
-
+    // these gizmos are used in Scene view to test obstacle collision detection and to show the size of the grid
     private void OnDrawGizmos() {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridSize.x, 0.5f, gridSize.y));
 
@@ -109,7 +111,7 @@ public class TileGrid : MonoBehaviour {
         }
     }
 
-
+    // StoreSelection and RemoveSelection handle the 2 possible selected tiles for feeding into the pathfinding later
     private void StoreSelection(ISelectable selectable) {
         Tile selectedTile = ((Tile)selectable);
         if (selectedTiles.Count >= 2) {
@@ -139,6 +141,7 @@ public class TileGrid : MonoBehaviour {
         }
     }
 
+    // method for showing how far the player can move - it's a breadth first search, which I think gives a nice visualization
     private void DrawMovementRange(Tile tile) {
         List<Tile> visited = new List<Tile>();
         HashSet<Tile> notVisited = new HashSet<Tile>(GetTraversibleNeighbors(tile));
@@ -162,6 +165,7 @@ public class TileGrid : MonoBehaviour {
         }
     }
 
+    // cleaning the grid up
     public void ResetGrid() {
         selectedTiles.Clear();
         foreach (Tile tile in grid) {

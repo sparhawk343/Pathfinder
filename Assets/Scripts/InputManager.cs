@@ -33,6 +33,9 @@ public class InputManager : MonoBehaviour {
         }
     }
 
+
+    // method for raycasting mouse interaction. I made a homebrew switch kind of statement to distinguish between click and hover
+    // there is probably some better w
     private void DetectObject(int caseSwitcher) {
         Ray ray = mainCamera.ScreenPointToRay(controls.Mouse.Position.ReadValue<Vector2>());
         RaycastHit hit;

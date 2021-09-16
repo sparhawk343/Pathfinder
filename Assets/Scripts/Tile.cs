@@ -19,7 +19,7 @@ public class Tile : MonoBehaviour, ISelectable, IHoverable {
 
     public UnityEvent<ISelectable> OnSelectedEvent;
     public UnityEvent<ISelectable> OnDeselectedEvent;
-    MeshRenderer meshRenderer;
+    private MeshRenderer meshRenderer;
 
     public Color isSelectedColor;
     public Color isHoveredColor;
@@ -52,7 +52,8 @@ public class Tile : MonoBehaviour, ISelectable, IHoverable {
         ChangeTileColor();
     }
 
-
+    // this method not only changes colors but helps us keep track of tile state - I made this behavior to get around selection problems
+    // when I started to run into having to reset/undo two steps back in the color history. having a priority order like this is better
     public void ChangeTileColor() {
         if (isSelected) {
             meshRenderer.material.color = isSelectedColor;

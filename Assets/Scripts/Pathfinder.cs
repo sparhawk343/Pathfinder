@@ -30,8 +30,9 @@ public class Pathfinder : MonoBehaviour {
             });
             currentTile = open.LastOrDefault();
 
-            // this null check is to prevent running out of tiles when trying to set an inaccesible
-            // tile as target (should probably prevent this from happening in some other way later)
+            // this null check is to prevent running out of tiles and getting stuck in an infinite while loop
+            // when trying to set an inaccesible tile as target
+            // (should probably prevent this from happening in some other way later)
             if (currentTile == null) {
                 Debug.Log("Tried to access inaccessible tile");
                 return null;
@@ -63,10 +64,13 @@ public class Pathfinder : MonoBehaviour {
                 }
             }
         }
-        // here is where we return the path (outside the while loop, which has the same check as the path found check, basically)
+        // here is where we return the path
+        // (outside the while loop, which has the same check as the path found check, basically)
         return RetracePath(start, target);
     }
 
+    // method that retraces where we went, flips the path and returns it so that it can be drawn
+    // this is where we make use of the setting of a parent tile from the cost calculation
     private List<Tile> RetracePath(Tile startTile, Tile endTile) {
         List<Tile> path = new List<Tile>();
         Tile currentTile = endTile;
@@ -82,6 +86,7 @@ public class Pathfinder : MonoBehaviour {
         return path;
     }
 
+    // method to get absolute distance between start and end tiles
     private int GetDistance(Tile tileA, Tile tileB) {
         int distanceX = Mathf.Abs(tileA.gridX - tileB.gridX);
         int distanceY = Mathf.Abs(tileA.gridY - tileB.gridY);
@@ -95,12 +100,15 @@ public class Pathfinder : MonoBehaviour {
 
     }
 
+    // this used to be a test method. it owes its continued existence to the count check, that makes sure we can't trigger the path logic with only
+    // one tile selected
     public void FindSpecificPath() {
         if (grid.selectedTiles.Count == 2) {
             FindPath(grid.selectedTiles[0], grid.selectedTiles[1]);
         }
     }
 
+    // cleanup method for reset button
     public void ResetPathFinder() {
         open.Clear();
         closed.Clear();
@@ -108,14 +116,12 @@ public class Pathfinder : MonoBehaviour {
     }
 
 
-    // TODO:
-    // more obstacles
-
-
+    // Stretch goals:
+    // optimize algorithm with heap
     // implement path line
     // implement player
     // implement action points
     // implement movement (walk/dash)
-    // optimize algorithm with heap
-    // implement vfx/highlights/gizmos for tile
+    // implement vfx highlights for tile or animations for juiciness (instead of / on top of color change)
+    // implement vfx stuff for path line
 }
