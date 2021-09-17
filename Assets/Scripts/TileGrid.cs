@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TileGrid : MonoBehaviour {
+
+    private Vector2Int gridSize = new Vector2Int(50, 50);
+    private float outlinePercent = 0.05f;
+    private int movementRange = 20;
+
     public Tile[,] grid;
     public List<Tile> selectedTiles = new List<Tile>(2);
     public Tile[] selectedArray = new Tile[2];
@@ -16,10 +21,7 @@ public class TileGrid : MonoBehaviour {
     public float tileRadius = 1f;
     public float tileDiameter;
 
-    Vector2Int gridSize = new Vector2Int(50, 50);
-    float outlinePercent = 0.05f;
-    int movementRange = 15;
-
+    
     private void Awake() {
         tileDiameter = tileRadius * 2;
         PopulateGrid();

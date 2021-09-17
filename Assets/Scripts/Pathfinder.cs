@@ -3,13 +3,14 @@ using UnityEngine;
 using System.Linq;
 
 public class Pathfinder : MonoBehaviour {
-    List<Tile> open = new List<Tile>();
-    List<Tile> closed = new List<Tile>();
 
-    Tile currentTile;
+    private List<Tile> open = new List<Tile>();
+    private List<Tile> closed = new List<Tile>();
 
-    const int baseDiagonalCost = 14;
-    const int baseStraightCost = 10;
+    private Tile currentTile;
+
+    private const int baseDiagonalCost = 14;
+    private const int baseStraightCost = 10;
 
     public TileGrid grid;
 

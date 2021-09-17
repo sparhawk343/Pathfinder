@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class Tile : MonoBehaviour, ISelectable, IHoverable {
+
+    private MeshRenderer meshRenderer;
+
     [HideInInspector] public int gCost;
     [HideInInspector] public int hCost;
     [HideInInspector] public bool isTraversible = true;
@@ -19,8 +22,7 @@ public class Tile : MonoBehaviour, ISelectable, IHoverable {
 
     public UnityEvent<ISelectable> OnSelectedEvent;
     public UnityEvent<ISelectable> OnDeselectedEvent;
-    private MeshRenderer meshRenderer;
-
+    
     public Color isSelectedColor;
     public Color isHoveredColor;
     public Color isInRangeColor;
@@ -106,5 +108,4 @@ public class Tile : MonoBehaviour, ISelectable, IHoverable {
         isPath = false;
         ChangeTileColor();
     }
-
 }
